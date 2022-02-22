@@ -14,9 +14,10 @@ import {
   Pressable,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
+import { useDispatch } from 'react-redux';
+import {Login} from './store/actions'
 import {Countries} from './Countries';
-// import { AuthContext } from './components/context';
+
 
 export function AuthenticationScreen({navigation}) {
   let textInput = useRef(null);
@@ -124,6 +125,7 @@ export function AuthenticationScreen({navigation}) {
   const [showSMS, setShowSMS] = useState(false);
   const [showtimeOTP, setShowtimeOTP] = useState(false);
   const [temp, setTemp] = useState('');
+  
   // const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
     if (countdown < 1) {
@@ -140,13 +142,12 @@ export function AuthenticationScreen({navigation}) {
     if (val.length === lengthInput) {
       if (val == 'A12345' && countdown >= 1) {
         // setIsLogin(true)
-        navigation.navigate('Home')
+        dispatch(Login(internalVal))
       } else {
         alert('Mã xác nhận không chính xác');
       }
     }
   };
-  // console.log(isLogin);
   const onPress = () => {
     textInput1.current.focus();
     // console.log(textInput1.current.focus, 'aaaaaaa');
@@ -161,17 +162,6 @@ export function AuthenticationScreen({navigation}) {
     };
   }, [countdown]);
 
-
-  // const timer = (() => {
-  //   clockCall = setInterval(() => {
-  //     decrementClock();
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(clockCall);
-  //   };
-  // });
-
-  // console.log(isLogin);
 
   const decrementClock = () => {
     if (countdown < 1) {
@@ -210,11 +200,7 @@ export function AuthenticationScreen({navigation}) {
     }
     
   };
-
-  // const loginHandle = (userOTP) => {
-  //   signIn(username, password);
-  // }
-
+  const dispatch = useDispatch();
   const renderInputPhoneNumber = () => {
     return (   
 
@@ -335,7 +321,7 @@ export function AuthenticationScreen({navigation}) {
         onRequestClose={() => {
           setModalVisibleOTP(!modalVisibleOTP);
         }}>
-        {/* <Pressable onPress={() => setModalVisibleOTP(!modalVisibleOTP)}> */}
+        
         <View style={{
           backgroundColor: '#EE0033',
           height: 58,
@@ -372,7 +358,6 @@ export function AuthenticationScreen({navigation}) {
                 {phoneNumber}
               </Text>
             </View>
-            {/* <View><Text style={style.title1}>Nhập mã OTP của bạn tại đây</Text></View> */}
 
             <TextInput
               ref={textInput1}
@@ -435,7 +420,7 @@ export function AuthenticationScreen({navigation}) {
             )}
             {/* <View>
               <TouchableOpacity style={{backgroundColor: 'red'}}
-                onPress={() => {loginHandle()}}
+                onPress={submit}
               >
                 <Text>OK</Text>
               </TouchableOpacity>
@@ -454,7 +439,8 @@ export function AuthenticationScreen({navigation}) {
         flex: 1,
         flexDirection: 'row',
         alignSelf: 'center',
-      }}>
+      }}
+      >
       <StatusBar
         animated={true}
         backgroundColor="#EE0033"
